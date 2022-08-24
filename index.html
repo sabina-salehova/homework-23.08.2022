@@ -14,7 +14,7 @@
     <main>
         <section>
             <div class="toDoListAll">
-                <div class="py-4 text-center row">
+                <div class="py-5 text-center row">
                     <div class="toDoListHeader">
                         <form action="">
                             <label for="listName">Name: </label>
@@ -30,9 +30,14 @@
                             
                         </form>
                     </div>
-                    <div class="forSearch pt-5">
-                        <input type="text" id="searchInput" class="w-25">
+                    <div class="forSearch pt-5">                        
+                        <input type="text" id="searchInput" class="w-25">                        
                         <button id="btnSearch">search</button>
+                    </div>
+                    <div class="forSalary pt-3 pb-5">
+                        <input type="text" id="minNumber" placeholder="min number salary">
+                        <input type="text" id="maxNumber" placeholder="max number salary">
+                        <button id="btnSalary">salary filter</button>
                     </div>
                     <div class="toDoList py-4">
                         <table class="toDoListTable">
