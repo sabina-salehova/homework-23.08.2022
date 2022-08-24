@@ -27,13 +27,10 @@ function showToDoList(){
         showList+=`
         <tr>
             <td>${listItem.id}</td>
-            <td onclick="editName(${listItem.id})">${listItem.name}</td>
-            <td>${listItem.surname}</td>
+            <td><input id="searchName" type="text" value="${listItem.name}" onblur="editName(${listItem.id}, this.value)"></td>
+            <td><input id="searchSurname" type="text" value="${listItem.surname}" onblur="editSurname(${listItem.id}, this.value)"></td>
             <td>${listItem.salary}</td>
-            <td>
-                <button onclick="editListItem1(${listItem.id})" class="btn btn-primary"><i class="fa-solid fa-pen-to-square"></i></i></button>
-                <button onclick="deleteListItem(${listItem.id})" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
-            </td>
+            <td><button onclick="deleteListItem(${listItem.id})" class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button></td>
         </tr>
         `
     })
@@ -54,11 +51,6 @@ btnAdd.addEventListener('click',function(){
     if(list.length!==0)
     {
         forId=list[list.length-1].id+1;
-        // list.forEach(listItem => {
-        //     if(listItem.name===listName.value && listItem.surname===listSurname.value && listItem.salary===salary.value)
-        //     return;   
-        // });
-
     } 
 
     let listObj={
@@ -73,20 +65,7 @@ btnAdd.addEventListener('click',function(){
     localStorage.setItem('list',JSON.stringify(list));
 })
 
-// function deleteListItem(){
-//     let listItembtn=document.querySelectorAll('.toDoBodyBtn');
-//     let list=JSON.parse(localStorage.getItem('list')); 
-//     let currentBtnId;
-//     listItembtn.forEach(btnItem=>btnItem.addEventListener('click',function(e){
-//         e.preventDefault();
-//         ecurrent=e.target;
-//         currentBtnId=ecurrent.parentElement.firstElementChild.value;         
-//         return;       
-//     }))
-//     let newList=list.forEach(listItem=>listItem.id!==currentBtnId);
-//     localStorage.setItem('list',JSON.stringify(newList));
-//     showToDoList();
-// }
+// ---- delete ----//
 
 function deleteListItem(itemId){
     let list=JSON.parse(localStorage.getItem('list'));
@@ -95,12 +74,85 @@ function deleteListItem(itemId){
     showToDoList();
 }
 
-function editName(x){
+
+
+// ---- edit ----//
+
+function editName(itemId,newValue){
     let list=JSON.parse(localStorage.getItem('list'));
-    
-    
+    list.forEach(i=>{
+        if(i.id===itemId)
+        {
+            i.name=newValue;
+        }
+    })  
+    localStorage.setItem('list',JSON.stringify(list));
+    showToDoList();  
 }
 
+function editSurname(itemId,newValue){
+    let list=JSON.parse(localStorage.getItem('list'));
+    list.forEach(i=>{
+        if(i.id===itemId)
+        {
+            i.surname=newValue;
+        }
+    }) 
+    localStorage.setItem('list',JSON.stringify(list));
+    showToDoList();  
+}
+
+
+
+// ---- search ----//
+
+let btnSearch=document.querySelector('#btnSearch');
+
+
+let todoBodySearch=document.createElement('tbody');
+    todoBodySearch.setAttribute('id','todoBodySearch');
+    toDoListTable.appendChild(todoBodySearch);
+
+
+btnSearch.addEventListener('click',function(){
+    let searchInput=document.querySelector('#searchInput').value.toUpperCase();
+    let list=JSON.parse(localStorage.getItem('list'));
+
+    let todoBody=document.getElementById('todoBody');    
+
+    if(list.length===0)
+    return;   
+    
+    if(searchInput==='')
+    {
+        todoBody.classList.remove('d-none');
+        todoBodySearch.setAttribute("class","d-none"); 
+    }
+    else
+    {
+        todoBody.setAttribute("class","d-none");
+        todoBodySearch.classList.remove('d-none');
+    }
+    
+    let searchList='';
+
+    list.forEach(listItem=>{
+        if(listItem.name.toUpperCase().includes(searchInput) || listItem.surname.toUpperCase().includes(searchInput))
+        {
+            searchList+=`
+            <tr>
+                <td>${listItem.id}</td>
+                <td>${listItem.name}</td>
+                <td>${listItem.surname}</td>
+                <td>${listItem.salary}</td>
+            </tr>
+            `
+        }        
+    })
+
+    document.getElementById('todoBodySearch').innerHTML=searchList;
+    showToDoList(); 
+})
 
 
 
